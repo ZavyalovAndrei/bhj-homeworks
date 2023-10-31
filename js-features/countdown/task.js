@@ -1,12 +1,8 @@
 const timeToSeconds = function() {
     const startTime = document.getElementById("timer");
     const fullTimer = startTime.textContent.split(":")
-    if (fullTimer.length < 3) {
-        startTime.textContent = timerCheck(startTime.textContent);
-    } else {
-        const fullTimerInSeconds = (fullTimer[0] * 3600) + (fullTimer[1] * 60) + ( + fullTimer[2]);
-        startTime.textContent = timerCheck(fullTimerInSeconds);
-    }
+    const fullTimerInSeconds = (fullTimer[0] * 3600) + (fullTimer[1] * 60) + ( + fullTimer[2]);
+    startTime.textContent = timerCheck(fullTimerInSeconds);
 }
 
 const timerCheck = function(timerSeconds){
