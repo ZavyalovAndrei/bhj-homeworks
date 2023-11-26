@@ -12,11 +12,31 @@ body {
 }
 .cart__product-count {
   position: absolute;
-  top: 0;
+  top: 0%;
   right: 0;
   border: 2px solid green;
   border-radius: 50%;
   padding: 2px 5px;
+}
+
+.cart__product-delete {
+  position: absolute;
+  display: flex;
+  width: 18%;
+  top: 75%;
+  right: 0;
+  font-weight: bold;
+  justify-content: center;
+  cursor: pointer;
+  border: 2px solid rgb(150, 10, 10);
+  color: rgb(150, 10, 10);
+  border-radius: 50%;
+  opacity: 0.6;
+}
+
+.cart__product-delete:hover{
+  background: gray;
+  opacity: 1;
 }
 
 .cart__product-image {
