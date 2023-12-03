@@ -37,6 +37,16 @@
   box-shadow: none;
 }
 
+.btn_logout {
+  background-color: rgb(129, 85, 96);
+  margin-left: 72%;
+  margin-top: 4%;
+}
+
+.btn:hover {
+  background-color: rgb(121, 0, 30);
+}
+
 .welcome {
   display: none;
 }
