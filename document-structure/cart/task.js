@@ -1,18 +1,16 @@
 const changeQuantityButtons = document.querySelectorAll(".product__quantity");
 let basket = document.querySelector(".cart__products");
-const delayAnimation = 960;
+const delayAnimation = 480;
 const basketContainer = document.querySelector(".cart");
+const key = "cart";
+let localStorageArray = restoreObject() || [];
 
-let keys = Object.keys(localStorage);
-if (keys.length === 0) {
-  basketContainer.style.display = "none";
-} else {
-  for (let key of keys) {
-    const id = key.replace(/"/g, "");
-    const value = localStorage.getItem(key).replace(/"/g, "").split(" ");
-    addToBasket(id, value[0], value[1]);
-  }
-}
+localStorageArray.forEach((element) => {
+  const id = element.id;
+  const image = element.imageLink;
+  const quantity = element.quantity;
+  addToBasket(id, image, quantity);
+});
 
 changeQuantityButtons.forEach((changeQuantityButton) => {
   changeQuantityButton.addEventListener("click", (element) => {
@@ -44,10 +42,13 @@ changeQuantityButtons.forEach((changeQuantityButton) => {
           basketContainer.style.display = "block";
         }
         addToBasket(id, imageLink, quantity);
-        localStorage.setItem(
-          '"' + id + '"',
-          '"' + imageLink + " " + quantity + '"'
-        );
+        const productData = {
+          id: id,
+          imageLink: imageLink,
+          quantity: quantity,
+        };
+        localStorageArray.push(productData);
+        saveObject(localStorageArray);
         const addedProduct = document.querySelector(
           '.cart__product[data-id="' + id + '"]'
         );
@@ -79,10 +80,12 @@ changeQuantityButtons.forEach((changeQuantityButton) => {
           productCard.querySelector(".product__image"),
           currentProductInBasket.querySelector(".cart__product-image")
         );
-        localStorage.setItem(
-          '"' + id + '"',
-          '"' + imageLink + " " + newQuantity + '"'
-        );
+        localStorageArray.forEach((element) => {
+          if (element.id === id) {
+            element.quantity = newQuantity;
+          }
+        });
+        saveObject(localStorageArray);
       }
     }
   });
@@ -92,7 +95,13 @@ document.querySelector(".cart__products").addEventListener("click", (event) => {
   const parent = document.querySelector(".cart__products");
   const deletedElement = event.target.closest(".cart__product");
   parent.removeChild(deletedElement);
-  localStorage.removeItem('"' + deletedElement.dataset.id + '"');
+  const delitedId = deletedElement.dataset.id;
+  for (let i = 0; i < localStorageArray.length; i++) {
+    if (localStorageArray[i].id === delitedId) {
+      localStorageArray.splice(i, 1);
+      saveObject(localStorageArray);
+    }
+  }
   if (parent.children.length === 0) {
     basketContainer.style.display = "none";
   }
@@ -139,7 +148,15 @@ function moveToBasket(product, productInBasket) {
   void productClone.offsetWidth;
   productClone.style.transform = "translateX(" + delta_x + "px)";
   productClone.style.transform += "translateY(" + delta_y + "px)";
-  productClone.style.transition = "1s";
+  productClone.style.transition = "0.5s";
 
   setTimeout(() => document.body.removeChild(productClone), delayAnimation);
+}
+
+function saveObject(object) {
+  localStorage.setItem(key, JSON.stringify(object));
+}
+
+function restoreObject() {
+  return JSON.parse(localStorage.getItem(key));
 }
